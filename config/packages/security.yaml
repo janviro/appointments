@@ -5,10 +5,17 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        app_practitioner_provider:
             entity:
                 class: App\Entity\Practitioner
                 property: email
+        app_client_provider:
+            entity:
+                class: App\Entity\Client
+                property: email
+        app_users:
+            chain:
+                providers: [ 'app_practitioner_provider', 'app_client_provider' ]
         # used to reload user from session & other features (e.g. switch_user)
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
@@ -17,7 +24,7 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: app_users
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
