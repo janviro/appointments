@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AppointmentRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,11 +37,17 @@ class Appointment
         return $this->dateTime;
     }
 
-    public function setDateTime(DateTimeInterface $dateTime): self
+    public function setDateTime(string $dateTimeString): self
     {
+        $dateTime = DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
         $this->dateTime = $dateTime;
 
         return $this;
+    }
+
+    public function getDateTimeString(): string
+    {
+        return $this->dateTime->format('Y-m-d H:i');
     }
 
     public function getClient(): ?Client
@@ -65,5 +72,15 @@ class Appointment
         $this->practitioner = $practitioner;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'client' => $this->getClient()->getEmail(),
+            'practitioner' => $this->getPractitioner()->getEmail(),
+            'datetime' => $this->getDateTimeString()
+        ];
     }
 }

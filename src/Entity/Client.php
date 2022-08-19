@@ -136,4 +136,12 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+        ];
+    }
 }
